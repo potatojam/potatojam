@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="HandheldFriendly" content="true" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="apple-mobile-web-app-title" content="Game">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+		<title>Bring me Cakes Demo</title>
+		<style>
+			.canvas-app-container {
+			  /* A positioned parent for loading visuals */
+			    width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center; 
+                overflow: auto;   
+                background: #2f1003;
+			}
+
+			.canvas-app-container:-webkit-full-screen {
+			  /* Auto width and height in Safari/Chrome fullscreen. */
+			  width: auto;
+			  height: auto;
+			}
+
+			.canvas-app-progress {
+			  position: absolute;
+			  background-color: rgb(245, 245, 245);
+			  height: 20px;
+			  bottom: 0px;
+              left:0px 
+			}
+
+			.canvas-app-progress-bar {
+			  font-size: 12px;
+			  height: 20px;
+			  color: rgb(255, 255, 255);
+			  background-color: rgb(30, 100, 234);
+			  text-align: center;
+			  line-height: 20px;
+			}
+
+			body 
+            {
+			  margin: 0px;
+                overflow-y:hidden;
+                overflow-x: hidden;
+
+			}
+            #canvas 
+            { 
+                width: 768px; 
+                height: 1024px; 
+                outline: none;
+            }
+		</style>
+
+		
+	</head>
+
+	<body>
+    <div id="fb-root"></div>
+
+	<div id="app-container" class="canvas-app-container">
+	    <canvas id="canvas" class="canvas-app-canvas" tabindex="1" width="1536" height="2048"></canvas>
+	</div>
+
+	<!-- -->
+	  
+	  <script type='text/javascript' src="dmloader.js"></script>
+	  <script type='text/javascript' src="Bring me Cakes.js" async onload=""></script>
+	<!-- -->
+
+	<script type='text/javascript'>
+		var extra_params = {
+			archive_location_filter: function( path ) {
+				return ("archive" + path + "");
+			},
+            
+			splash_image: "1536_2048.png",
+			custom_heap_size: 268435456
+		}
+
+        Module.runApp("canvas", extra_params);
+	    window.onresize = resize;
+        resize();
+        function resize()
+        {
+//            var w = 1640;
+            var w = 1536;
+            var h = 2048;
+            var scale = Math.min(window.innerWidth / w, window.innerHeight / h);
+            var el = document.getElementById("canvas");
+            var app_continer = document.getElementById('app-container');
+            el.width = w;
+            w = w * scale;
+            h = h * scale;
+            el.style.width = w+"px";
+            el.style.height = h+"px";
+//            app_continer.style.width = w+"px";
+//            app_continer.style.height = h+"px";
+        } ;
+	</script>
+</body>
+</html>
