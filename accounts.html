@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Account Deletion Request - Potato Jam</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="css/template_2.css?60" rel="stylesheet" />
+</head>
+<body>
+<section class="block4"><img class="center_img" src="img/logo.png" width="80%" />
+<section class="block2">
+<div class="first-text">
+
+<div>
+  <form id="accountForm" onsubmit="return handleSubmit(event)">
+    <p>Please fill out this form to request your account deletion.</p>
+    <p>Nickname: <input type="text" name="nickname" id="nickname" required></p>
+    <p>Game: <select name="game" id="game" onchange="showLink()" required>
+      <option value="">Select a game</option>
+      <option value="Onet Paradise">Onet Paradise</option>
+      <option value="Onet Master">Onet Master</option>
+    </select></p>
+    <br>
+    <p id="link"></p>
+    <br>
+    <p><input type="submit" value="Request account removal"></p>
+    <br><br><br>
+  </form>
+</div>
+</div>
+
+<script>
+// Check URL parameters and set default game selection
+function setDefaultGame() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const query = urlParams.toString();
+  const gameSelect = document.getElementById("game");
+  
+  if (query === "1") {
+    gameSelect.value = "Onet Paradise";
+  } else if (query === "2") {
+    gameSelect.value = "Onet Master";
+  }
+  
+  showLink(); // Update the link display
+}
+
+// Define a function to show the link based on the game selection
+function showLink() {
+  const game = document.getElementById("game");
+  const link = document.getElementById("link");
+
+  const gameValue = game.value;
+  const gameText = game.options[game.selectedIndex].text;
+
+  // Check the game value and set the link accordingly
+  if (gameValue === "Onet Paradise") {
+    link.innerHTML = "You can play <a href='https://play.google.com/store/apps/details?id=com.potatojam.onet_paradise.match_two_tiles'>" + gameText + "</a> here.";
+  } else if (gameValue === "Onet Master") {
+    link.innerHTML = "You can play <a href='https://play.google.com/store/apps/details?id=com.potatojam.onet.master.connect.match.pairs'>" + gameText + "</a> here.";
+  } else {
+    link.innerHTML = "";
+  }
+}
+
+// Handle form submission
+function handleSubmit(event) {
+  event.preventDefault();
+  
+  const nickname = document.getElementById("nickname").value;
+  const game = document.getElementById("game").value;
+  
+  if (!nickname || !game) {
+    alert("Please enter your nickname and select a game.");
+    return false;
+  }
+  
+  // Create email content
+  const subject = "Account deletion request";
+  const body = `The user with the nickname ${nickname} has requested to delete their account for the game ${game}`;
+  const mailtoLink = `mailto:support@potatojam.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  
+  // Open email client
+  window.location.href = mailtoLink;
+  
+  // Show confirmation message
+  document.querySelector('.first-text div').innerHTML = `
+    <p>Thank you for your request. Your email client should open with a pre-filled message.</p>
+    <p>Please send the email to complete your account deletion request.</p>
+    <p>Your account will be removed during the next 3 days after we receive your email.</p>
+    <br>
+    <p><a href="accounts.html">Submit another request</a></p>
+  `;
+  
+  return false;
+}
+
+// Initialize the page
+window.onload = function() {
+  setDefaultGame();
+};
+</script>
+
+</section>
+</body>
+</html> 
