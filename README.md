@@ -26,13 +26,15 @@ If you want to use a custom domain:
 
 ## Site Structure
 
-- `index.html` - Homepage with game portfolio
-- `css/home.css` - Responsive homepage design (independent of the legacy page styles)
+- `index.html` - Homepage with game portfolio and inline responsive styles
 - `policy.html` - Privacy policy
 - `eula.html` - End User License Agreement  
 - `accounts.html` - Account deletion request form
 - `css/` - Stylesheets
 - `img/` - Images and game screenshots
+- `img/optimized/` - Responsive WebP images delivered by the homepage
+- `scripts/optimize-images.py` - Rebuilds the responsive image variants
+- `_config.yml` - GitHub Pages publishing exclusions for repository documentation and scripts
 - `fonts/` - Custom fonts
 
 ## Features
@@ -52,13 +54,13 @@ If you want to use a custom domain:
 
 ## Homepage assets
 
-The homepage uses the original game artwork and a text-free Bring Me Cakes hero from the supplied `RedHood/Promo/BmC_PressKit/promo_wide.png`, exported to `img/home-hero.jpg` as a JPEG.
+The homepage uses the original game artwork and a text-free Bring Me Cakes hero from the supplied `RedHood/Promo/BmC_PressKit/promo_wide.png`, exported to `img/home-hero.jpg` as a JPEG source. The page delivers responsive WebP variants from `img/optimized/`; the original files remain available for regeneration and legacy pages.
 
 Travel Merge uses a landscape promotional composition in `img/TravelMerge_Splash.jpg`, created with built-in ImageGen from the supplied gameplay screenshot, the existing `TravelMerge/logo1.psd` logo, and the Merge Summer cover as a layout reference, with a warm-white glow behind the logo. This is composed promotional artwork rather than an unedited gameplay capture.
 
 Color Merge Lines uses the supplied `MergeLines/Icons/icon1_628.png` and `MergeLines/Export/splash.png`, stored as `img/ColorMergeLines.jpg` and `img/ColorMergeLines_Logo.png`. Its desktop cover pairs the original artwork and logo; compact mobile cards use the numbered-dot artwork alone.
 
-At viewport widths up to 600 px, every game card uses a square icon from `img/icons/` through a responsive `<picture>` source. These are 384 × 384 px WebP exports; larger viewports retain the landscape covers. Bring Me Cakes also uses the compact mobile layout, and store badges keep their full size.
+At viewport widths up to 600 px, every game card uses a square icon through a responsive `<picture>` source. The 384 × 384 px originals in `img/icons/` produce 128, 240, and 384 px delivery variants; larger viewports use landscape covers at 320, 480, 800, or 1200 px. Bring Me Cakes also uses the compact mobile layout, and store badges keep their full size.
 
 Icon sources below are relative to the supplied `Nextcloud/PotatoJam` artwork folder, except the published 1010 Color Match icon, which was not found there:
 
@@ -87,7 +89,15 @@ All badges have a 136 × 40 px visible frame with 10 px of clear space on every 
 
 To preview the site locally, run `python3 -m http.server 4173 --bind 127.0.0.1` in the repository root and open `http://127.0.0.1:4173/`.
 
+The homepage styles live in the `<style>` element in `index.html` to avoid an additional render-blocking request. The hero keeps high fetch priority and uses a responsive image source; game covers and footer images remain lazy-loaded. Button colors provide at least 4.5:1 contrast with their white text.
+
+To rebuild the image variants, install ImageMagick 7 and run `python3 scripts/optimize-images.py`. This is an asset maintenance step; the site has no build requirement or runtime JavaScript. The script preserves transparency, uses lossless compression for the studio and Defold logos, and matches the existing 16:9 crop for desktop covers.
+
+GitHub Pages currently serves static assets with a 10-minute cache lifetime. Browser cache headers must be changed at the hosting or CDN layer; HTML cache directives or a Pages-unsupported `_headers` file would not resolve that PageSpeed warning.
+
 Temporary mockups, generated working images, and preview screenshots belong in the ignored `output/` directory; only the final assets used by the site are committed.
+
+GitHub Pages excludes `README.md` and the `scripts/` directory from deployment through `_config.yml`, keeping these maintenance files off the public website and out of search results. The local Python preview serves the repository directly and does not apply these publishing exclusions. `accounts.html` remains available at its direct URL, without a link on the homepage.
 
 ## Contact
 

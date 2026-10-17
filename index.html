@@ -20,14 +20,907 @@
     <link rel="icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
     <link rel="canonical" href="https://potatojam.com/">
-    <link rel="stylesheet" href="css/home.css">
+    <!-- Inline homepage styles avoid an extra request before the first paint. -->
+    <style>
+        :root {
+            color-scheme: light;
+            --cream: #fff9e9;
+            --paper: #fffdf7;
+            --ink: #242125;
+            --muted: #625e57;
+            --coral: #cf3d35;
+            --coral-dark: #b8322b;
+            --mint: #eaf0d8;
+            --line: #ece6d7;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 24px;
+        }
+
+        body {
+            margin: 0;
+            padding: 28px;
+            background: #edf3e7;
+            color: var(--ink);
+            font-family: ui-rounded, "Avenir Next", "Segoe UI", system-ui, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        a:focus-visible {
+            outline: 3px solid #276585;
+            outline-offset: 5px;
+        }
+
+        h1, h2, h3, p {
+            margin: 0;
+        }
+
+        h1, h2, h3 {
+            font-weight: 850;
+            line-height: 1.12;
+        }
+
+        .site-shell {
+            max-width: 1280px;
+            margin: 0 auto;
+            overflow: clip;
+            background: var(--cream);
+            border: 1px solid rgba(95, 104, 66, 0.08);
+            border-radius: 26px;
+            box-shadow: 0 12px 60px rgba(55, 75, 30, 0.06);
+        }
+
+        .skip-link {
+            position: absolute;
+            z-index: 10;
+            top: 12px;
+            left: 24px;
+            padding: 12px 20px;
+            transform: translateY(-160%);
+            border-radius: 8px;
+            background: var(--ink);
+            color: white;
+        }
+
+        .skip-link:focus {
+            transform: translateY(0);
+        }
+
+        .site-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            min-height: 108px;
+            padding: 14px 48px;
+            background: var(--paper);
+        }
+
+        .brand {
+            flex-shrink: 0;
+            width: 150px;
+        }
+
+        .site-header nav {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 15px;
+            font-weight: 750;
+        }
+
+        .site-header nav a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 8px 18px;
+            border-radius: 28px;
+        }
+
+        .site-header nav a:hover {
+            background: var(--mint);
+        }
+
+        .site-header nav .nav-games {
+            background: var(--coral);
+            color: #fff;
+        }
+
+        .site-header nav .nav-games:hover {
+            background: var(--coral-dark);
+        }
+
+        .hero {
+            position: relative;
+            isolation: isolate;
+            min-height: 440px;
+            background: #fff5da;
+        }
+
+        .hero-art {
+            position: absolute;
+            z-index: -1;
+            inset: 0 0 0 32%;
+            -webkit-mask-image: linear-gradient(to right, transparent, #000 31%);
+            mask-image: linear-gradient(to right, transparent, #000 31%);
+        }
+
+        .hero-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 58% 60%;
+        }
+
+        .hero-copy {
+            position: relative;
+            width: 57%;
+            padding: 57px 0 58px 48px;
+        }
+
+        .eyebrow {
+            color: #b53832;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.13em;
+            line-height: 1.5;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            margin-top: 16px;
+            font-size: clamp(48px, 5.5vw, 74px);
+            letter-spacing: -0.055em;
+            line-height: 1.02;
+        }
+
+        .hero-potato {
+            display: inline-block;
+            width: 0.42em;
+            height: 0.42em;
+            margin-left: 0.07em;
+            vertical-align: -0.12em;
+        }
+
+        .hero-description {
+            margin-top: 22px;
+            color: #423d36;
+            font-size: 19px;
+            line-height: 1.55;
+        }
+
+        .explore-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 26px;
+            min-height: 54px;
+            margin-top: 28px;
+            padding: 14px 25px;
+            border-radius: 30px;
+            background: var(--coral);
+            color: #fff;
+            font-size: 17px;
+            font-weight: 750;
+            transition: background-color 160ms ease;
+        }
+
+        .explore-button:hover {
+            background: var(--coral-dark);
+        }
+
+        .games-section {
+            padding: 44px 40px 52px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            margin: 0 8px 26px;
+        }
+
+        .section-heading h2 {
+            margin-top: 5px;
+            font-size: 40px;
+            letter-spacing: -0.04em;
+        }
+
+        .section-heading > p {
+            padding-bottom: 4px;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        .game-card {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            min-width: 0;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: var(--paper);
+        }
+
+        .game-cover {
+            display: block;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+        }
+
+        .game-cover:focus-visible {
+            outline-offset: -5px;
+        }
+
+        .game-cover picture {
+            display: block;
+            height: 100%;
+        }
+
+        .game-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 220ms ease;
+        }
+
+        .game-cover:hover img {
+            transform: scale(1.025);
+        }
+
+        .game-cover--merge-lines {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 14px;
+            background: #194e43;
+        }
+
+        .game-cover--merge-lines .merge-lines-board {
+            flex: 0 0 auto;
+            width: 50%;
+            height: auto;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .merge-lines-board img {
+            height: auto;
+        }
+
+        .game-cover--merge-lines .merge-lines-logo {
+            min-width: 0;
+            width: calc(50% - 14px);
+            height: auto;
+            object-fit: contain;
+        }
+
+        .game-info {
+            padding: 19px 20px 10px;
+        }
+
+        .game-info h3 {
+            font-size: 21px;
+            letter-spacing: -0.035em;
+        }
+
+        .game-info > p:not(.eyebrow) {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Match badge frames at 136 × 40px, with 10px clear space on every side. */
+        .game-stores {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            align-content: flex-start;
+            padding: 0 10px 10px;
+        }
+
+        .store-link {
+            display: block;
+            flex: 0 0 auto;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .store-link img {
+            width: auto;
+            max-width: none;
+            height: 40px;
+        }
+
+        .store-badge-frame {
+            display: grid;
+            place-items: center;
+            width: 136px;
+            height: 40px;
+            overflow: hidden;
+            border-radius: 6px;
+            background: #000;
+            box-shadow: inset 0 0 0 1px #a6a6a6;
+        }
+
+        .store-badge-frame img {
+            /* Replace only the original edge with the common frame; keep artwork proportional. */
+            clip-path: inset(2px round 5px);
+        }
+
+        .store-link:hover {
+            background: #f1eddf;
+        }
+
+        .game-card--featured {
+            grid-column: span 2;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            grid-template-rows: 1fr auto;
+            background: #f4f0dc;
+        }
+
+        .game-card--featured .game-cover {
+            grid-row: 1 / 3;
+            aspect-ratio: auto;
+            min-height: 250px;
+        }
+
+        .game-card--featured .game-info {
+            align-self: end;
+            padding: 28px 32px 12px;
+        }
+
+        .game-card--featured h3 {
+            margin-top: 10px;
+            font-size: 32px;
+        }
+
+        .game-card--featured .game-info > p:not(.eyebrow) {
+            font-size: 16px;
+        }
+
+        .game-card--featured .game-stores {
+            padding: 0 22px 24px;
+        }
+
+        .about-section {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin: 0 40px;
+            padding: 32px;
+            border-radius: 18px;
+            background: var(--mint);
+        }
+
+        .studio-mascot {
+            flex: 0 0 auto;
+            width: 108px;
+            height: 108px;
+        }
+
+        .about-copy {
+            max-width: 600px;
+        }
+
+        .about-copy h2 {
+            margin-top: 7px;
+            font-size: 30px;
+            letter-spacing: -0.04em;
+        }
+
+        .about-copy > p:last-child {
+            margin-top: 12px;
+            color: #515746;
+            font-size: 15px;
+        }
+
+        .defold-link {
+            flex-shrink: 0;
+            width: 72px;
+            margin-left: auto;
+        }
+
+        .site-footer {
+            padding: 40px 48px 24px;
+        }
+
+        .footer-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 28px;
+        }
+
+        .footer-title {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .support-link {
+            display: inline-block;
+            padding: 8px 0;
+            color: #984138;
+            font-size: 16px;
+        }
+
+        .support-link:hover,
+        .site-footer nav a:hover {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .site-footer nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 24px;
+            font-size: 13px;
+        }
+
+        .site-footer nav a {
+            display: inline-flex;
+            align-items: center;
+            min-height: 44px;
+        }
+
+        .footer-fineprint {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--line);
+            color: #726d61;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .footer-fineprint p:first-child {
+            flex-shrink: 0;
+        }
+
+        .footer-fineprint p:last-child {
+            max-width: 730px;
+        }
+
+        @media (max-width: 1050px) {
+            body {
+                padding: 16px;
+            }
+
+            .site-header {
+                padding-inline: 32px;
+            }
+
+            .hero-copy {
+                width: 62%;
+                padding-left: 32px;
+            }
+
+            .hero-art {
+                left: 36%;
+            }
+
+            .games-section {
+                padding-inline: 24px;
+            }
+
+            .games-grid {
+                gap: 18px;
+            }
+
+            .game-info {
+                padding-inline: 16px;
+            }
+
+            .game-info h3 {
+                font-size: 19px;
+            }
+
+            .game-stores {
+                padding-inline: 6px;
+            }
+
+            .game-card--featured .game-info {
+                padding-inline: 24px;
+            }
+
+            .game-card--featured .game-stores {
+                padding-inline: 14px;
+            }
+
+            .about-section {
+                gap: 24px;
+                margin-inline: 24px;
+                padding: 24px;
+            }
+
+            .defold-link {
+                width: 64px;
+            }
+
+            .site-footer {
+                padding-inline: 32px;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .games-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .hero {
+                min-height: 410px;
+            }
+
+            .hero-copy {
+                padding-top: 48px;
+                padding-bottom: 48px;
+            }
+
+            .hero h1 {
+                font-size: 55px;
+            }
+
+            .hero-description {
+                max-width: 310px;
+                font-size: 17px;
+            }
+
+            .desktop-break {
+                display: none;
+            }
+
+            .section-heading > p {
+                max-width: 180px;
+                text-align: right;
+            }
+
+            .game-card--featured {
+                grid-column: 1 / -1;
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            }
+
+            .game-card--featured h3 {
+                font-size: 27px;
+            }
+
+            .about-section {
+                flex-wrap: wrap;
+            }
+
+            .about-copy {
+                flex: 1;
+            }
+
+            .defold-link {
+                margin-left: 132px;
+            }
+
+            .footer-main {
+                align-items: flex-start;
+            }
+
+            .site-footer nav {
+                justify-content: flex-end;
+                gap: 0 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            html {
+                scroll-padding-top: 16px;
+            }
+
+            body {
+                padding: 0;
+            }
+
+            .site-shell {
+                border: 0;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            .site-header {
+                gap: 12px;
+                min-height: 86px;
+                padding: 12px 20px;
+            }
+
+            .brand {
+                width: 112px;
+            }
+
+            .site-header nav {
+                gap: 3px;
+                font-size: 12px;
+            }
+
+            .site-header nav a {
+                padding: 8px 9px;
+            }
+
+            .hero {
+                display: flex;
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            .hero-copy {
+                order: -1;
+                width: 100%;
+                padding: 30px 24px 0;
+            }
+
+            .hero .eyebrow {
+                font-size: 11px;
+            }
+
+            .hero h1 {
+                margin-top: 12px;
+                font-size: clamp(44px, 12.4vw, 62px);
+                letter-spacing: -0.05em;
+            }
+
+            .hero-description {
+                max-width: 330px;
+                margin-top: 16px;
+                font-size: 17px;
+            }
+
+            .explore-button {
+                gap: 24px;
+                min-height: 50px;
+                margin-top: 20px;
+                padding: 12px 22px;
+                font-size: 16px;
+            }
+
+            .hero-art {
+                position: relative;
+                z-index: -1;
+                inset: auto;
+                width: 100%;
+                height: 230px;
+                margin-top: -5px;
+                -webkit-mask-image: linear-gradient(to bottom, transparent, #000 23%);
+                mask-image: linear-gradient(to bottom, transparent, #000 23%);
+            }
+
+            .hero-art img {
+                object-position: center 62%;
+            }
+
+            .games-section {
+                padding: 30px 16px 32px;
+            }
+
+            .section-heading {
+                margin: 0 4px 20px;
+            }
+
+            .section-heading h2 {
+                font-size: 32px;
+            }
+
+            .section-heading .eyebrow {
+                font-size: 10px;
+            }
+
+            .section-heading > p {
+                display: none;
+            }
+
+            .games-grid {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 14px;
+            }
+
+            .game-card,
+            .game-card--featured {
+                grid-template-columns: 34% minmax(0, 1fr);
+                grid-template-rows: auto 1fr;
+                border-radius: 14px;
+            }
+
+            .game-cover,
+            .game-card--featured .game-cover {
+                grid-row: 1 / 3;
+                align-self: center;
+                width: calc(100% - 12px);
+                min-height: 0;
+                margin: 12px 0 12px 12px;
+                aspect-ratio: 1;
+                border-radius: 10px;
+            }
+
+            .game-cover img {
+                object-fit: contain;
+            }
+
+            .game-cover--merge-lines {
+                padding: 0;
+            }
+
+            .game-cover--merge-lines .merge-lines-board {
+                width: 100%;
+                height: 100%;
+                border-radius: 0;
+            }
+
+            .game-cover--merge-lines .merge-lines-logo {
+                display: none;
+            }
+
+            .game-info,
+            .game-card--featured .game-info {
+                align-self: center;
+                padding: 16px 16px 4px;
+            }
+
+            .game-info h3,
+            .game-card--featured h3 {
+                margin-top: 0;
+                font-size: 19px;
+            }
+
+            .game-info > p:not(.eyebrow),
+            .game-card--featured .game-info > p:not(.eyebrow) {
+                margin-top: 5px;
+                font-size: 12px;
+            }
+
+            .game-stores,
+            .game-card--featured .game-stores {
+                grid-column: 2;
+                padding: 0 6px 6px;
+            }
+
+            .game-card--multi .game-cover {
+                grid-row: 1;
+            }
+
+            .game-card--multi .game-stores {
+                grid-column: 1 / -1;
+                padding: 0 6px 6px;
+            }
+
+            .game-card--multi .game-info {
+                padding-bottom: 10px;
+            }
+
+            .game-card--featured .eyebrow {
+                display: none;
+            }
+
+            .about-section {
+                display: grid;
+                grid-template-columns: 70px minmax(0, 1fr);
+                gap: 18px;
+                margin-inline: 16px;
+                padding: 24px 20px;
+            }
+
+            .studio-mascot {
+                width: 70px;
+                height: 70px;
+            }
+
+            .about-copy {
+                grid-column: 2;
+                grid-row: 1 / 3;
+            }
+
+            .about-copy .eyebrow {
+                font-size: 10px;
+            }
+
+            .about-copy h2 {
+                font-size: 26px;
+            }
+
+            .about-copy > p:last-child {
+                font-size: 14px;
+            }
+
+            .defold-link {
+                grid-column: 1;
+                grid-row: 2;
+                width: 50px;
+                margin: 0 auto;
+            }
+
+            .site-footer {
+                padding: 30px 24px 20px;
+            }
+
+            .footer-main {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .site-footer nav {
+                justify-content: flex-start;
+                gap: 0 18px;
+                font-size: 12px;
+            }
+
+            .footer-fineprint {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .site-header {
+                gap: 8px;
+                padding-inline: 16px;
+            }
+
+            .brand {
+                width: 90px;
+            }
+
+            .site-header nav {
+                gap: 0;
+                font-size: 11px;
+            }
+
+            .site-header nav a {
+                padding-inline: 8px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            .game-cover img,
+            .explore-button {
+                transition: none;
+            }
+        }
+    </style>
 </head>
 <body>
     <a class="skip-link" href="#games">Skip to games</a>
     <div class="site-shell" id="top">
         <header class="site-header">
             <a class="brand" href="./" aria-label="Potato Jam home">
-                <img src="img/logo.png" width="1176" height="602" alt="Potato Jam">
+                <img src="img/optimized/logo-300.webp" srcset="img/optimized/logo-150.webp 150w, img/optimized/logo-300.webp 300w, img/optimized/logo-450.webp 450w" sizes="(max-width: 360px) 90px, (max-width: 600px) 112px, 150px" width="300" height="154" alt="Potato Jam">
             </a>
             <nav aria-label="Main navigation">
                 <a class="nav-games" href="#games">Games</a>
@@ -39,11 +932,11 @@
         <main>
             <section class="hero" aria-labelledby="hero-heading">
                 <div class="hero-art" aria-hidden="true">
-                    <img src="img/home-hero.jpg" width="1920" height="1080" alt="" fetchpriority="high">
+                    <img src="img/optimized/home-hero-800.webp" srcset="img/optimized/home-hero-480.webp 480w, img/optimized/home-hero-800.webp 800w, img/optimized/home-hero-1280.webp 1280w, img/optimized/home-hero-1920.webp 1920w" sizes="(max-width: 600px) max(100vw, 410px), (max-width: 850px) 730px, (max-width: 1050px) 790px, 870px" width="1920" height="1080" alt="" fetchpriority="high">
                 </div>
                 <div class="hero-copy">
                     <p class="eyebrow">Hello, we're Potato Jam</p>
-                    <h1 id="hero-heading">Mobile &amp; web<br>games<img class="hero-potato" src="img/apple-touch-icon.png" width="180" height="180" alt="" aria-hidden="true"></h1>
+                    <h1 id="hero-heading">Mobile &amp; web<br>games<img class="hero-potato" src="img/optimized/potato-64.webp" width="64" height="64" alt="" aria-hidden="true"></h1>
                     <p class="hero-description">Puzzle games, matching adventures<br class="desktop-break"> and classic favorites.</p>
                     <a class="explore-button" href="#games">
                         Explore games
@@ -66,8 +959,8 @@
                     <article class="game-card">
                         <a class="game-cover" href="https://poki.com/en/g/travel-merge" aria-label="Play Travel Merge on Poki">
                             <picture>
-                                <source media="(max-width: 600px)" srcset="img/icons/travel-merge.webp" width="384" height="384">
-                                <img src="img/TravelMerge_Splash.jpg" width="1200" height="675" alt="" loading="lazy" decoding="async">
+                                <source media="(max-width: 600px)" srcset="img/optimized/icon-travel-merge-128.webp 128w, img/optimized/icon-travel-merge-240.webp 240w, img/optimized/icon-travel-merge-384.webp 384w" sizes="calc(34vw - 24px)" width="384" height="384">
+                                <img src="img/optimized/travel-merge-800.webp" srcset="img/optimized/travel-merge-320.webp 320w, img/optimized/travel-merge-480.webp 480w, img/optimized/travel-merge-800.webp 800w, img/optimized/travel-merge-1200.webp 1200w" sizes="(max-width: 850px) calc((100vw - 104px) / 2), (max-width: 1050px) calc((100vw - 124px) / 3), (max-width: 1336px) calc((100vw - 192px) / 3), 382px" width="800" height="450" alt="" loading="lazy" decoding="async">
                             </picture>
                         </a>
                         <div class="game-info">
@@ -84,8 +977,8 @@
                     <article class="game-card">
                         <a class="game-cover" href="https://poki.com/en/g/merge-summer" aria-label="Play Merge Summer on Poki">
                             <picture>
-                                <source media="(max-width: 600px)" srcset="img/icons/merge-summer.webp" width="384" height="384">
-                                <img src="img/MergeSummer_Splash.jpg" width="1200" height="675" alt="" loading="lazy" decoding="async">
+                                <source media="(max-width: 600px)" srcset="img/optimized/icon-merge-summer-128.webp 128w, img/optimized/icon-merge-summer-240.webp 240w, img/optimized/icon-merge-summer-384.webp 384w" sizes="calc(34vw - 24px)" width="384" height="384">
+                                <img src="img/optimized/merge-summer-800.webp" srcset="img/optimized/merge-summer-320.webp 320w, img/optimized/merge-summer-480.webp 480w, img/optimized/merge-summer-800.webp 800w, img/optimized/merge-summer-1200.webp 1200w" sizes="(max-width: 850px) calc((100vw - 104px) / 2), (max-width: 1050px) calc((100vw - 124px) / 3), (max-width: 1336px) calc((100vw - 192px) / 3), 382px" width="800" height="450" alt="" loading="lazy" decoding="async">
                             </picture>
                         </a>
                         <div class="game-info">
@@ -102,8 +995,8 @@
                     <article class="game-card">
                         <a class="game-cover" href="https://poki.com/en/g/king-of-mahjong" aria-label="Play King of Mahjong on Poki">
                             <picture>
-                                <source media="(max-width: 600px)" srcset="img/icons/king-of-mahjong.webp" width="384" height="384">
-                                <img src="img/OnetKing_Splash.jpg" width="1200" height="675" alt="" loading="lazy" decoding="async">
+                                <source media="(max-width: 600px)" srcset="img/optimized/icon-king-of-mahjong-128.webp 128w, img/optimized/icon-king-of-mahjong-240.webp 240w, img/optimized/icon-king-of-mahjong-384.webp 384w" sizes="calc(34vw - 24px)" width="384" height="384">
+                                <img src="img/optimized/king-of-mahjong-800.webp" srcset="img/optimized/king-of-mahjong-320.webp 320w, img/optimized/king-of-mahjong-480.webp 480w, img/optimized/king-of-mahjong-800.webp 800w, img/optimized/king-of-mahjong-1200.webp 1200w" sizes="(max-width: 850px) calc((100vw - 104px) / 2), (max-width: 1050px) calc((100vw - 124px) / 3), (max-width: 1336px) calc((100vw - 192px) / 3), 382px" width="800" height="450" alt="" loading="lazy" decoding="async">
                             </picture>
                         </a>
                         <div class="game-info">
@@ -120,8 +1013,8 @@
                     <article class="game-card">
                         <a class="game-cover" href="https://poki.com/en/g/market-sort" aria-label="Play Market Sort on Poki">
                             <picture>
-                                <source media="(max-width: 600px)" srcset="img/icons/market-sort.webp" width="384" height="384">
-                                <img src="img/Sort_Splash.jpg" width="1200" height="675" alt="" loading="lazy" decoding="async">
+                                <source media="(max-width: 600px)" srcset="img/optimized/icon-market-sort-128.webp 128w, img/optimized/icon-market-sort-240.webp 240w, img/optimized/icon-market-sort-384.webp 384w" sizes="calc(34vw - 24px)" width="384" height="384">
+                                <img src="img/optimized/market-sort-800.webp" srcset="img/optimized/market-sort-320.webp 320w, img/optimized/market-sort-480.webp 480w, img/optimized/market-sort-800.webp 800w, img/optimized/market-sort-1200.webp 1200w" sizes="(max-width: 850px) calc((100vw - 104px) / 2), (max-width: 1050px) calc((100vw - 124px) / 3), (max-width: 1336px) calc((100vw - 192px) / 3), 382px" width="800" height="450" alt="" loading="lazy" decoding="async">
                             </picture>
                         </a>
                         <div class="game-info">
@@ -138,8 +1031,8 @@
                     <article class="game-card game-card--featured game-card--multi">
                         <a class="game-cover" href="https://poki.com/en/g/bring-me-cakes" aria-label="Play Bring Me Cakes on Poki">
                             <picture>
-                                <source media="(max-width: 600px)" srcset="img/icons/bring-me-cakes.webp" width="384" height="384">
-                                <img src="img/bmc.jpg" width="1200" height="675" alt="" loading="lazy" decoding="async">
+                                <source media="(max-width: 600px)" srcset="img/optimized/icon-bring-me-cakes-128.webp 128w, img/optimized/icon-bring-me-cakes-240.webp 240w, img/optimized/icon-bring-me-cakes-384.webp 384w" sizes="calc(34vw - 24px)" width="384" height="384">
+                                <img src="img/optimized/bring-me-cakes-800.webp" srcset="img/optimized/bring-me-cakes-320.webp 320w, img/optimized/bring-me-cakes-480.webp 480w, img/optimized/bring-me-cakes-800.webp 800w, img/optimized/bring-me-cakes-1200.webp 1200w" sizes="(max-width: 850px) max(460px, calc((100vw - 84px) / 2)), 650px" width="800" height="450" alt="" loading="lazy" decoding="async">
                             </picture>
                         </a>
                         <div class="game-info">
@@ -167,8 +1060,8 @@
                     <article class="game-card">
                         <a class="game-cover" href="https://poki.com/en/g/onet-master" aria-label="Play Onet Master on Poki">
                             <picture>
-                                <source media="(max-width: 600px)" srcset="img/icons/onet-master.webp" width="384" height="384">
-                                <img src="img/OnetMaster_Splash.jpg" width="1200" height="620" alt="" loading="lazy" decoding="async">
+                                <source media="(max-width: 600px)" srcset="img/optimized/icon-onet-master-128.webp 128w, img/optimized/icon-onet-master-240.webp 240w, img/optimized/icon-onet-master-384.webp 384w" sizes="calc(34vw - 24px)" width="384" height="384">
+                                <img src="img/optimized/onet-master-800.webp" srcset="img/optimized/onet-master-320.webp 320w, img/optimized/onet-master-480.webp 480w, img/optimized/onet-master-800.webp 800w, img/optimized/onet-master-1200.webp 1200w" sizes="(max-width: 850px) calc((100vw - 104px) / 2), (max-width: 1050px) calc((100vw - 124px) / 3), (max-width: 1336px) calc((100vw - 192px) / 3), 382px" width="800" height="450" alt="" loading="lazy" decoding="async">
                             </picture>
                         </a>
                         <div class="game-info">
@@ -185,8 +1078,8 @@
                     <article class="game-card">
                         <a class="game-cover" href="https://poki.com/en/g/1010-color-match" aria-label="Play 1010 Color Match on Poki">
                             <picture>
-                                <source media="(max-width: 600px)" srcset="img/icons/1010-color-match.webp" width="384" height="384">
-                                <img src="img/1010_Splash.jpg" width="1200" height="675" alt="" loading="lazy" decoding="async">
+                                <source media="(max-width: 600px)" srcset="img/optimized/icon-1010-color-match-128.webp 128w, img/optimized/icon-1010-color-match-240.webp 240w, img/optimized/icon-1010-color-match-384.webp 384w" sizes="calc(34vw - 24px)" width="384" height="384">
+                                <img src="img/optimized/1010-color-match-800.webp" srcset="img/optimized/1010-color-match-320.webp 320w, img/optimized/1010-color-match-480.webp 480w, img/optimized/1010-color-match-800.webp 800w, img/optimized/1010-color-match-1200.webp 1200w" sizes="(max-width: 850px) calc((100vw - 104px) / 2), (max-width: 1050px) calc((100vw - 124px) / 3), (max-width: 1336px) calc((100vw - 192px) / 3), 382px" width="800" height="450" alt="" loading="lazy" decoding="async">
                             </picture>
                         </a>
                         <div class="game-info">
@@ -203,8 +1096,8 @@
                     <article class="game-card">
                         <a class="game-cover" href="https://poki.com/en/g/domino-merge" aria-label="Play Domino Merge! on Poki">
                             <picture>
-                                <source media="(max-width: 600px)" srcset="img/icons/domino-merge.webp" width="384" height="384">
-                                <img src="img/Dice_Splash.jpg" width="1200" height="675" alt="" loading="lazy" decoding="async">
+                                <source media="(max-width: 600px)" srcset="img/optimized/icon-domino-merge-128.webp 128w, img/optimized/icon-domino-merge-240.webp 240w, img/optimized/icon-domino-merge-384.webp 384w" sizes="calc(34vw - 24px)" width="384" height="384">
+                                <img src="img/optimized/domino-merge-800.webp" srcset="img/optimized/domino-merge-320.webp 320w, img/optimized/domino-merge-480.webp 480w, img/optimized/domino-merge-800.webp 800w, img/optimized/domino-merge-1200.webp 1200w" sizes="(max-width: 850px) calc((100vw - 104px) / 2), (max-width: 1050px) calc((100vw - 124px) / 3), (max-width: 1336px) calc((100vw - 192px) / 3), 382px" width="800" height="450" alt="" loading="lazy" decoding="async">
                             </picture>
                         </a>
                         <div class="game-info">
@@ -221,8 +1114,8 @@
                     <article class="game-card game-card--multi">
                         <a class="game-cover" href="https://poki.com/en/g/solitaire-klondike-2" aria-label="Play Classic Solitaire Klondike on Poki">
                             <picture>
-                                <source media="(max-width: 600px)" srcset="img/icons/solitaire-klondike.webp" width="384" height="384">
-                                <img src="img/csk.jpg" width="1200" height="586" alt="" loading="lazy" decoding="async">
+                                <source media="(max-width: 600px)" srcset="img/optimized/icon-solitaire-klondike-128.webp 128w, img/optimized/icon-solitaire-klondike-240.webp 240w, img/optimized/icon-solitaire-klondike-384.webp 384w" sizes="calc(34vw - 24px)" width="384" height="384">
+                                <img src="img/optimized/solitaire-klondike-800.webp" srcset="img/optimized/solitaire-klondike-320.webp 320w, img/optimized/solitaire-klondike-480.webp 480w, img/optimized/solitaire-klondike-800.webp 800w, img/optimized/solitaire-klondike-1200.webp 1200w" sizes="(max-width: 850px) calc((100vw - 104px) / 2), (max-width: 1050px) calc((100vw - 124px) / 3), (max-width: 1336px) calc((100vw - 192px) / 3), 382px" width="800" height="450" alt="" loading="lazy" decoding="async">
                             </picture>
                         </a>
                         <div class="game-info">
@@ -249,10 +1142,10 @@
                     <article class="game-card">
                         <a class="game-cover game-cover--merge-lines" href="https://poki.com/en/g/color-merge-lines" aria-label="Play Color Merge Lines on Poki">
                             <picture class="merge-lines-board">
-                                <source media="(max-width: 600px)" srcset="img/icons/color-merge-lines.webp" width="384" height="384">
-                                <img src="img/ColorMergeLines.jpg" width="628" height="628" alt="" loading="lazy" decoding="async">
+                                <source media="(max-width: 600px)" srcset="img/optimized/icon-color-merge-lines-128.webp 128w, img/optimized/icon-color-merge-lines-240.webp 240w, img/optimized/icon-color-merge-lines-384.webp 384w" sizes="calc(34vw - 24px)" width="384" height="384">
+                                <img src="img/optimized/icon-color-merge-lines-384.webp" srcset="img/optimized/icon-color-merge-lines-128.webp 128w, img/optimized/icon-color-merge-lines-240.webp 240w, img/optimized/icon-color-merge-lines-384.webp 384w" sizes="(max-width: 850px) calc((100vw - 160px) / 4), (max-width: 1050px) calc((100vw - 208px) / 6), (max-width: 1336px) calc((100vw - 276px) / 6), 177px" width="384" height="384" alt="" loading="lazy" decoding="async">
                             </picture>
-                            <img class="merge-lines-logo" src="img/ColorMergeLines_Logo.png" width="490" height="216" alt="" loading="lazy" decoding="async">
+                            <img class="merge-lines-logo" src="img/optimized/color-merge-lines-logo-180.webp" srcset="img/optimized/color-merge-lines-logo-180.webp 180w, img/optimized/color-merge-lines-logo-360.webp 360w, img/optimized/color-merge-lines-logo-490.webp 490w" sizes="(max-width: 600px) 0px, (max-width: 850px) calc((100vw - 216px) / 4), (max-width: 1050px) calc((100vw - 292px) / 6), (max-width: 1336px) calc((100vw - 360px) / 6), 163px" width="490" height="216" alt="" loading="lazy" decoding="async">
                         </a>
                         <div class="game-info">
                             <h3>Color Merge Lines</h3>
@@ -268,8 +1161,8 @@
                     <article class="game-card">
                         <a class="game-cover" href="https://poki.com/en/g/onet-paradise" aria-label="Play Onet Paradise on Poki">
                             <picture>
-                                <source media="(max-width: 600px)" srcset="img/icons/onet-paradise.webp" width="384" height="384">
-                                <img src="img/onetp.jpg" width="1200" height="675" alt="" loading="lazy" decoding="async">
+                                <source media="(max-width: 600px)" srcset="img/optimized/icon-onet-paradise-128.webp 128w, img/optimized/icon-onet-paradise-240.webp 240w, img/optimized/icon-onet-paradise-384.webp 384w" sizes="calc(34vw - 24px)" width="384" height="384">
+                                <img src="img/optimized/onet-paradise-800.webp" srcset="img/optimized/onet-paradise-320.webp 320w, img/optimized/onet-paradise-480.webp 480w, img/optimized/onet-paradise-800.webp 800w, img/optimized/onet-paradise-1200.webp 1200w" sizes="(max-width: 850px) calc((100vw - 104px) / 2), (max-width: 1050px) calc((100vw - 124px) / 3), (max-width: 1336px) calc((100vw - 192px) / 3), 382px" width="800" height="450" alt="" loading="lazy" decoding="async">
                             </picture>
                         </a>
                         <div class="game-info">
@@ -286,8 +1179,8 @@
                     <article class="game-card">
                         <a class="game-cover" href="https://poki.com/en/g/monster-duo" aria-label="Play Monster Duo on Poki">
                             <picture>
-                                <source media="(max-width: 600px)" srcset="img/icons/monster-duo.webp" width="384" height="384">
-                                <img src="img/onetm.jpg" width="1200" height="627" alt="" loading="lazy" decoding="async">
+                                <source media="(max-width: 600px)" srcset="img/optimized/icon-monster-duo-128.webp 128w, img/optimized/icon-monster-duo-240.webp 240w, img/optimized/icon-monster-duo-384.webp 384w" sizes="calc(34vw - 24px)" width="384" height="384">
+                                <img src="img/optimized/monster-duo-800.webp" srcset="img/optimized/monster-duo-320.webp 320w, img/optimized/monster-duo-480.webp 480w, img/optimized/monster-duo-800.webp 800w, img/optimized/monster-duo-1200.webp 1200w" sizes="(max-width: 850px) calc((100vw - 104px) / 2), (max-width: 1050px) calc((100vw - 124px) / 3), (max-width: 1336px) calc((100vw - 192px) / 3), 382px" width="800" height="450" alt="" loading="lazy" decoding="async">
                             </picture>
                         </a>
                         <div class="game-info">
@@ -304,14 +1197,14 @@
             </section>
 
             <section class="about-section" id="about" aria-labelledby="about-heading">
-                <img class="studio-mascot" src="img/Cool.png" width="408" height="408" alt="Our very cool fairy-tale wolf" loading="lazy" decoding="async">
+                <img class="studio-mascot" src="img/optimized/studio-mascot-216.webp" srcset="img/optimized/studio-mascot-144.webp 144w, img/optimized/studio-mascot-216.webp 216w, img/optimized/studio-mascot-324.webp 324w" sizes="(max-width: 600px) 70px, 108px" width="216" height="216" alt="Our very cool fairy-tale wolf" loading="lazy" decoding="async">
                 <div class="about-copy">
                     <p class="eyebrow">A small studio. A playful spirit.</p>
                     <h2 id="about-heading">Made by Potato Jam</h2>
                     <p>We make mobile and web games filled with colorful puzzles, curious characters, and the joy of figuring things out.</p>
                 </div>
                 <a class="defold-link" href="https://defold.com/" aria-label="Made with Defold">
-                    <img src="img/mdefold.png" width="1134" height="1463" alt="Made with Defold" loading="lazy" decoding="async">
+                    <img src="img/optimized/made-with-defold-144.webp" srcset="img/optimized/made-with-defold-96.webp 96w, img/optimized/made-with-defold-144.webp 144w, img/optimized/made-with-defold-216.webp 216w" sizes="(max-width: 600px) 50px, (max-width: 1050px) 64px, 72px" width="144" height="186" alt="Made with Defold" loading="lazy" decoding="async">
                 </a>
             </section>
         </main>
@@ -325,7 +1218,6 @@
                 <nav aria-label="Legal and support">
                     <a href="policy.html">Privacy policy</a>
                     <a href="eula.html">Terms of use</a>
-                    <a href="accounts.html">Delete account</a>
                 </nav>
             </div>
             <div class="footer-fineprint">
